@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="effective_communication_uwp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:effective_communication_uwp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <SplitView x:Name="MainView" DisplayMode="CompactOverlay" IsPaneOpen="False" PaneBackground="LightGray" CompactPaneLength="50">
+            <SplitView.Pane>
+                <StackPanel Orientation="Vertical">
+                    <AppBarButton x:Name="expandButton" Width="50" Height="50" Click="expandButton_Click">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" />
+                    </AppBarButton>
+                    <StackPanel Orientation="Horizontal">
+                        <AppBarButton x:Name="checkHealthButton" Label="Device" Width="50" Height="50" Click="checkHealthButton_Click">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE95E;" />
+                        </AppBarButton>
+                        <TextBlock Text="Device monitoring" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <AppBarButton x:Name="settingsButton" Label="Settings" Width="50" Height="50" Click="settingsButton_Click">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE713;" />
+                        </AppBarButton>
+                        <TextBlock Text="Device settings" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Frame x:Name="Fr_MainFrame"/>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
+</Page>
