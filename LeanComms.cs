@@ -31,11 +31,23 @@ namespace effective_communication_uwp
 
         int RunNum = 0;
         public static bool debugging = false;
+        public static LeanComms current_instance;
 
         public LeanComms(MbedDevice mbed)
         {
             device = mbed;
             FindAndStreamDevice();
+            current_instance = this;
+        }
+
+        public void clearNewSerialDataEvent()
+        {
+            if (NewSerialData == null) return;
+
+            foreach (Delegate d in NewSerialData.GetInvocationList())
+            {
+                NewSerialData -= (SerialDataHandler)d;
+            }
         }
 
         public async void FindAndStreamDevice()
