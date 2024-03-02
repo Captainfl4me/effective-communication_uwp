@@ -30,7 +30,23 @@
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
-                <Frame x:Name="Fr_MainFrame"/>
+                <Grid x:Name="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Frame x:Name="Fr_MainFrame"/>
+                    <Grid x:Name="ConnectStateGrid" 
+                          Grid.Row="1" 
+                          Background="LightGray">
+                        <TextBlock x:Name="ConnectState"
+                                   Text="Disconnected"
+                                   HorizontalAlignment="Center"/>
+                    </Grid>
+                </Grid>
             </SplitView.Content>
         </SplitView>
     </Grid>

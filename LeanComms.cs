@@ -29,6 +29,9 @@ namespace effective_communication_uwp
         public delegate void SerialDataHandler(NewDataArgs e);
         public event SerialDataHandler NewSerialData;
 
+        public delegate void SerialConnectHandler();
+        public event SerialConnectHandler ConnectStateChanged;
+
         int RunNum = 0;
         public static bool debugging = false;
         public static LeanComms current_instance;
@@ -48,6 +51,11 @@ namespace effective_communication_uwp
             {
                 NewSerialData -= (SerialDataHandler)d;
             }
+        }
+
+        public bool IsConnected()
+        {
+            return serialPort != null ? true : false;
         }
 
         public async void FindAndStreamDevice()
@@ -85,19 +93,14 @@ namespace effective_communication_uwp
                             serialPort.ReadTimeout = TimeSpan.FromMilliseconds(10);
                             serialPort.BaudRate = 115200;
                             ReadCancellationTokenSource = new CancellationTokenSource();
+                            ConnectStateChanged();
                             Listen();
                         }
-                        catch (Exception ex)
-                        {
-
-                        }
+                        catch (Exception) { }
                     }
                 }
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception) { }
         }
         private async void Listen()
         {
@@ -114,10 +117,7 @@ namespace effective_communication_uwp
                     }
                 }
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception) { }
         }
 
         public async void WriteSerial(string message)
@@ -177,10 +177,12 @@ namespace effective_communication_uwp
                         }
                     }
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
                     ReadCancellationTokenSource.Cancel();
                     serialPort.Dispose();
+                    serialPort = null;
+                    ConnectStateChanged();
                     FindAndStreamDevice();
                 }
             }
@@ -188,19 +190,31 @@ namespace effective_communication_uwp
 
         private async Task WriteAsync(CancellationToken cancellationToken, string message)
         {
+            if (!this.IsConnected())
+            {
+                FindAndStreamDevice();
+                if (!this.IsConnected()) return;
+            }
+
             Task<UInt32> storeAsyncTask;
             cancellationToken.ThrowIfCancellationRequested();
             dataWriterObject = new DataWriter(serialPort.OutputStream);
             // Load the text from the sendText input text box to the dataWriter object
             dataWriterObject.WriteString(message);
 
-            // Launch an async task to complete the write operation
-            storeAsyncTask = dataWriterObject.StoreAsync().AsTask(cancellationToken);
-
-            UInt32 bytesWritten = await storeAsyncTask;
-            if (bytesWritten > 0)
+            try
             {
-                // status += "bytes written successfully!";
+                // Launch an async task to complete the write operation
+                storeAsyncTask = dataWriterObject.StoreAsync().AsTask(cancellationToken);
+
+                UInt32 bytesWritten = await storeAsyncTask;
+            } catch (Exception)
+            {
+                WriteCancellationTokenSource.Cancel();
+                serialPort.Dispose();
+                serialPort = null;
+                ConnectStateChanged();
+                FindAndStreamDevice();
             }
         }
     }

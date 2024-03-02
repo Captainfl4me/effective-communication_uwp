@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Media;
 
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -21,8 +22,23 @@ namespace effective_communication_uwp
             this.InitializeComponent();
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             serial = new LeanComms(LeanComms.MbedDevice.F411RE);
+            serial.ConnectStateChanged += ConenctStateChanged;
             Fr_MainFrame.Navigate(this.defaultPage);
+        }
 
+        private void ConenctStateChanged()
+        {
+            if (serial.IsConnected())
+            {
+                ConnectState.Text = "Connected";
+                ConnectState.Foreground = new SolidColorBrush(Windows.UI.Colors.White);
+                ConnectStateGrid.Background = new SolidColorBrush(Windows.UI.Colors.Green);
+            }
+            else
+            {
+                ConnectState.Text = "Disconnected";
+                ConnectStateGrid.Background = new SolidColorBrush(Windows.UI.Colors.Gray);
+            }
         }
 
         private void requestNavigation(Type page)
