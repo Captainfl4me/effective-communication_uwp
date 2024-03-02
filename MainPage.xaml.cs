@@ -19,7 +19,7 @@ namespace effective_communication_uwp
         public MainPage()
         {
             this.InitializeComponent();
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Maximized;
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             serial = new LeanComms(LeanComms.MbedDevice.F411RE);
             Fr_MainFrame.Navigate(this.defaultPage);
 

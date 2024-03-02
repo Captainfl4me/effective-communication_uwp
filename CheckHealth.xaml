@@ -18,7 +18,6 @@
 
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
             <Button x:Name="SyncButton"
-                    CornerRadius="5"
                     Click="SyncButton_Click"
                     HorizontalAlignment="Right">
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE895;" />
